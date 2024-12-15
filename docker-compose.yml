@@ -1,0 +1,43 @@
+services:
+  app:
+    build: .
+    ports:
+      - "4000:4000"
+    container_name: xyz-finance-app
+    environment:
+      - PGHOST=db
+      - PGPORT=5432
+      - PGUSER=postgres
+      - PGPASSWORD=root
+      - PGDATABASE=db_xyz-finance-app
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - xyz-finance-network
+  
+  db:
+    image: postgres:17-alpine
+    container_name: db_xyz-finance-app
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=db_xyz-finance-app
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - xyz-finance-network
+
+volumes:
+  db_data:
+
+networks:
+  xyz-finance-network:
+    driver: bridge
