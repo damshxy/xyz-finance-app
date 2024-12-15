@@ -24,4 +24,5 @@ func transactionRoutes(app fiber.Router) {
 
 	app.Post("/transactions", handler.CreateTransaction)
 	app.Post("/transactions/:transaction_id/refund", handler.MarkTransactionAsRefund)
+	app.Get("/transactions/consumer/:consumer_id", handler.GetConsumerByID)
 }
