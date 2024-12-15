@@ -36,3 +36,22 @@ func (h *TransactionHandler) CreateTransaction(c *fiber.Ctx) error {
 		"message": "Transaction created successfully",
 	})
 }
+
+func (h *TransactionHandler) MarkTransactionAsRefund(c *fiber.Ctx) error {
+	transactionID, err := c.ParamsInt("transaction_id")
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid transaction ID",
+		})
+	}
+
+	if err := h.usecase.RefundTransaction(transactionID); err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"message": "Transaction marked as refunded successfully",
+	})
+}

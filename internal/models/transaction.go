@@ -10,4 +10,5 @@ type Transaction struct {
 	Installment    float64 `json:"installment" gorm:"not null"`
 	Interest       float64 `json:"interest" gorm:"not null"`
 	AssetName      string  `json:"asset_name" gorm:"not null"`
+	Refunded bool `json:"refunded" gorm:"default:false"`
 }
