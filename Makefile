@@ -15,7 +15,7 @@ run-dev:
 
 test:
 	@echo "Running tests..."
-	go test -v ./... cover
+	go test -v ./...
 	@echo "Tests completed."
 
 clean:
