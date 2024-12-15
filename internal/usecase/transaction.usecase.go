@@ -95,3 +95,4 @@ func (u *transactionUsecase) GetTransactionByConsumerID(consumerID int) ([]*mode
 
 	return transaction, nil
 }
+}
