@@ -55,3 +55,24 @@ func (h *TransactionHandler) MarkTransactionAsRefund(c *fiber.Ctx) error {
 		"message": "Transaction marked as refunded successfully",
 	})
 }
+
+func (h *TransactionHandler) GetConsumerByID(c *fiber.Ctx) error {
+	consumerID, err := c.ParamsInt("consumer_id")
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid consumer ID",
+		})
+	}
+
+	transaction, err := h.usecase.GetTransactionByConsumerID(consumerID)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"message": "Transactions retrieved successfully",
+		"transactions": transaction,
+	})
+}

@@ -10,6 +10,7 @@ import (
 
 type TransactionUsecase interface {
 	CreateTransaction(transaction models.Transaction) error
+	GetTransactionByConsumerID(consumerID int) ([]*models.Transaction, error)
 	RefundTransaction(transactionID int) error
 }
 
@@ -79,4 +80,18 @@ func (u *transactionUsecase) RefundTransaction(transactionID int) error {
 	}
 
 	return nil
+}
+
+func (u *transactionUsecase) GetTransactionByConsumerID(consumerID int) ([]*models.Transaction, error) {
+	_, err := u.consumerRepo.GetConsumerByID(consumerID)
+	if err != nil {
+		return nil, errors.New("consumer not found")
+	}
+
+	transaction, err := u.repo.GetTransactionByConsumerID(consumerID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to retrieve transactions: %w", err)
+	}
+
+	return transaction, nil
 }

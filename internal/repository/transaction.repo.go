@@ -43,7 +43,7 @@ func (r *transactionRepository) GetTransactionByID(id int) (*models.Transaction,
 
 func (r *transactionRepository) GetTransactionByConsumerID(consumerID int) ([]*models.Transaction, error) {
 	var transactions []*models.Transaction
-	err := r.db.Where("consumer_id = ?", consumerID).Find(&transactions).Error
+	err := r.db.Preload("Consumer").Where("consumer_id = ?", consumerID).Find(&transactions).Error
 	if err != nil {
 		return transactions, err
 	}
